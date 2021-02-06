@@ -16,7 +16,7 @@ namespace Services
             _context = context;
         }
 
-        public List<Product> SearchProductFilter(int? id, string searchTerm, int? sortby)
+        public List<Product> SearchProductFilter(int? id, string searchTerm, int? sortby,int? pageNo,int? recordSize,out int count)
         {
             var proList = _context.Products.AsQueryable();
 
@@ -43,8 +43,19 @@ namespace Services
                         break;
                 }
             }
-            return proList.ToList();
+            pageNo = pageNo ?? 1;
+            var skipCount = (pageNo.Value - 1) * recordSize.Value;
+            count = proList.Count();
+
+            return proList.Skip(skipCount).Take(recordSize.Value).ToList();
 
         }
+
+        public async Task<bool> AddProduct(Product product)
+        {
+            _context.Products.Add(product);
+           return await _context.SaveChangesAsync()>0;
+        }
+
     }
 }

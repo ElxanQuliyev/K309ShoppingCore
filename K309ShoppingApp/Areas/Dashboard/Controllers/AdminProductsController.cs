@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using K309ShoppingApp.Areas.Dashboard.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using Services;
 
 namespace K309ShoppingApp.Areas.Dashboard.Controllers
 {
@@ -19,11 +20,12 @@ namespace K309ShoppingApp.Areas.Dashboard.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment webHostEnvironment;
-
-        public AdminProductsController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
+        private ProductService _productService;
+        public AdminProductsController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment, ProductService productService)
         {
             webHostEnvironment = hostEnvironment;
             _context = context;
+            _productService = new ProductService(context);
         }
 
         // GET: Dashboard/AdminProducts
@@ -95,8 +97,7 @@ namespace K309ShoppingApp.Areas.Dashboard.Controllers
                     CategoryID=model.CategoryID,
                     Discount=model.Discount
                 };
-                _context.Add(pro);
-                await _context.SaveChangesAsync();
+                await _productService.AddProduct(pro);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryID"] = new SelectList(_context.Categories, "ID", "Name", model.CategoryID);

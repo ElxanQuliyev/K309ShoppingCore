@@ -25,18 +25,11 @@ namespace K309ShoppingApp.Controllers
             _categoryService = new CategoryService(applicationDbContext);
         }
 
-        public IActionResult Index(int? id,string searchTerm,int? sortby)
+        public IActionResult Index()
        {
             
-            ProductWithCategoryVM vm = new()
-            {
-                Categories = _categoryService.GetCategories(),
-                Products = _productService.SearchProductFilter(id,searchTerm,sortby),
-                searchTerm = searchTerm,
-                CategoryID = id,
-                SortBy=sortby
-            };
-            return View(vm);
+            
+            return View();
         }
 
         public IActionResult Privacy()

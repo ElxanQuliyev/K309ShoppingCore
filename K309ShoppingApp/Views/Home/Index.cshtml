@@ -1,58 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@model ProductWithCategoryVM
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
 
-<div class="row">
-    <div class="col-lg-3">
-        <div class="my-2">
-            <form method="get" id="searchForm">
-                <input type="text" name="searchTerm" value="@Model.searchTerm" />
-                <input type="submit" value="Search" />
-            </form>
-        </div>
-        <ul class="list-group list-unstyled">
-            <li class="list-group-item"><a class="list-group-item @(Model.CategoryID==null?"active":"")" href="/">All Products</a></li>
-            @foreach (var cat in Model.Categories)
-            {
-                <li><a class="list-group-item @(Model.CategoryID==cat.ID?"active":"")"
-                       href="@Url.Action("index","home",new {id=cat.ID, searchTerm=Model.searchTerm,sortBy=Model.SortBy})">@cat.Name</a></li>
-            }
-        </ul>
-        <ul class="list-group list-unstyled my-3">
-            <li class="list-group-item"><a class="list-group-item" href="/">Default</a></li>
-            <li class="list-group-item"><a class="list-group-item" href="@Url.Action("Index","Home",new {sortBy=Convert.ToInt32(ProductFilter.PriceLowToHigh) })">Price High to Low</a></li>
-            <li class="list-group-item"><a class="list-group-item" href="@Url.Action("Index","Home",new {sortBy=Convert.ToInt32(ProductFilter.PriceHighToLow) })">Price Low to High</a></li>
-            <li class="list-group-item"><a class="list-group-item" href="@Url.Action("Index","Home",new {sortBy=Convert.ToInt32(ProductFilter.Latest) })">Latest</a></li>
-        </ul>
-
-    </div>
-    <div class="col-lg-9">
-        @if (Model.Products.Count > 0)
-        {
-            <div class="row">
-                @foreach (var item in Model.Products)
-                {
-                    <div class="card col-lg-4">
-                        <img class="card-img-top" src="~/images/@item.PictureUrl" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">@item.Name - @item.Price Azn</h5>
-                            <p class="card-text">@item.Description.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-        else
-        {
-            <span class="alert alert-danger">Product not found! </span>
-        }
-
-    </div>
-</div>
